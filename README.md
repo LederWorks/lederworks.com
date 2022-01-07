@@ -1,2 +1,1 @@
-# lederworks.com
-GitHub Page for LederWorks.com
+# Welcome to LederWorks
