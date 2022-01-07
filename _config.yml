@@ -28,7 +28,7 @@ twitter_username: LederWorks
 github_username:  LederWorks
 
 # Build settings
-theme: jekyll-theme-slate
+theme: minima
 plugins:
   - jekyll-feed
 
