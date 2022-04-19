@@ -2,7 +2,7 @@ baseURL = 'https://lederworks.com/'
 languageCode = 'en-us'
 DefaultContentLanguage = "en"
 title = 'LederWorks'
-#theme = "hugo-theme-techdoc"
+#theme = ["hugo-theme-techdoc"]
 
 
 hasCJKLanguage = true
@@ -16,32 +16,32 @@ enableMissingTranslationPlaceholders = false
   [module.hugoVersion]
     min = "0.56.0"
   [[module.imports]]
-#    path = "github.com/gohugoio/gohugoioTheme"
-#    path = "github.com/gohugoio/hugo-mod-heroicons"
     path = "github.com/thingsym/hugo-theme-techdoc"
+  [[module.imports]]
+    path = "github.com/gohugoio/hugo-mod-heroicons"
 
 [params]
 
     # Source Code repository section
-    description = "Helping businesses around the globe in their cloud adoption with Azure, AWS and GCP"
-    github_repository = "https://github.com/thingsym/hugo-theme-techdoc"
+    description = "Helping businesses around the globe with their cloud adoption."
+    github_repository = "https://github.com/LederWorks/lederworks.com"
     #version = "0.9.7"
 
     # Documentation repository section
     # documentation repository (set edit link to documentation repository)
-    github_doc_repository = "https://github.com/thingsym/hugo-theme-techdoc"
+    github_doc_repository = "https://github.com/LederWorks/lederworks.com"
     github_doc_repository_path = ""
 
     # Analytic section
-    google_analytics_id = "" # Your Google Analytics tracking id
-    tag_manager_container_id = "" # Your Google Tag Manager container id
+    google_analytics_id = "3458082695" # Your Google Analytics tracking id
+    tag_manager_container_id = "G-4R2XLFNXV2" # Your Google Tag Manager container id
     google_site_verification = "" # Your Google Site Verification for Search Console
 
     # Open Graph and Twitter Cards settings section
     # Open Graph settings for each page are set on the front matter.
     # See https://gohugo.io/templates/internal/#open-graph
     # See https://gohugo.io/templates/internal/#twitter-cards
-    title = "Hugo Techdoc Theme"
+    title = "Lederworks"
     images = ["images/og-image.png"] # Open graph images are placed in `static/images`
 
     # Theme settings section
@@ -62,7 +62,7 @@ enableMissingTranslationPlaceholders = false
     menu_exclusion = [
         "archives",
         "archive",
-        "blog",
+        #"blog",
         "entry",
         "post",
         "posts",
@@ -70,10 +70,10 @@ enableMissingTranslationPlaceholders = false
 
     # Algolia site search section
     # See https://www.algolia.com/doc/
-    # algolia_search_enable = true
-    # algolia_indexName = "hugo-demo-techdoc"
-    # algolia_appId = "7W4SAN4PLK"
-    # algolia_apiKey = "cbf12a63ff72d9c5dc0c10c195cf9128" # Search-Only API Key
+    algolia_search_enable = true
+    algolia_indexName = "lederworks.com"
+    algolia_appId = "T4FIVUC89Y"
+    algolia_apiKey = "7ee40d562f169fb44ea7bdea4ceff9aa" # Search-Only API Key
 
 # Global menu section
 # See https://gohugo.io/content-management/menus/

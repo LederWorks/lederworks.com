@@ -1,0 +1,5 @@
+github.com/gohugoio/hugo-mod-heroicons v0.0.0-20210121184556-d1635e3c8e62 h1:jtmtbc8wd17iUall0Hl6ZBE5Q4l0rQYWnpvk4/g0LuY=
+github.com/gohugoio/hugo-mod-heroicons v0.0.0-20210121184556-d1635e3c8e62/go.mod h1:6mFNBWXSBQpSRwVrb1jozCJDgQkw+5aIu1yy17D0PW4=
+github.com/refactoringui/heroicons v0.4.2/go.mod h1:82HsLWQga7MkEl5aK8TctxPPIBlXrsyWcVTB57uipuk=
+github.com/thingsym/hugo-theme-techdoc v0.9.8 h1:rZj2eYaI/lvyPmXJbn3QS6eaULbH5o4NU5UI0VHN54w=
+github.com/thingsym/hugo-theme-techdoc v0.9.8/go.mod h1:HgH3EWQ4j2sDjNP8UBio6zyZim8RnfJCY1gTWxVGcxA=
