@@ -1,5 +1,3 @@
-/.idea
-/.vscode
 /public
 node_modules
 nohup.out
@@ -7,3 +5,10 @@ nohup.out
 trace.out
 .hugo_build.lock
 resources/_gen/images/
+
+# VS Code
+/.vscode
+*.code-workspace
+
+# Idea
+/.idea
