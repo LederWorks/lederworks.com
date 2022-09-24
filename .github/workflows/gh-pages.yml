@@ -50,7 +50,7 @@ jobs:
       #       ${{ runner.os }}-node-
 
       - run: npm cache verify
-      - run: ls ~/.npm/_cacache
+      - run: ls ~/.npm/_cacache/_lastverified
 
       - run: npm ci
       - run: npm test
