@@ -1,10 +1,11 @@
 /public
-node_modules
+resources/
+node_modules/
+package-lock.json
+.hugo_build.lock
 nohup.out
 .DS_Store
 trace.out
-.hugo_build.lock
-resources/_gen/images/
 
 # VS Code
 /.vscode
