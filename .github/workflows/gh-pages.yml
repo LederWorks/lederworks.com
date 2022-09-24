@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest #22.04
+    runs-on: ubuntu-22.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
@@ -24,11 +24,11 @@ jobs:
           extended: true
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.4.1
         with:
-          node-version: '3.4.1'
-          # check-latest: true
-          # cache: 'npm'
+          # node-version: '16'
+          check-latest: true
+          cache: 'npm'
           # The action defaults to search for the dependency file (package-lock.json,
           # npm-shrinkwrap.json or yarn.lock) in the repository root, and uses its
           # hash as a part of the cache key.
@@ -37,7 +37,7 @@ jobs:
           #   '**/package-lock.json'
           #   server/app/package-lock.json
           #   frontend/app/package-lock.json
-          # cache-dependency-path: '**/package-lock.json'
+          cache-dependency-path: '**/package-lock.json'
 
       # - name: Cache dependencies
       #   uses: actions/cache@v1
