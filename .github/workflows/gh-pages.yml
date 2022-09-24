@@ -26,7 +26,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 'latest'
           check-latest: true
           cache: 'npm'
           # The action defaults to search for the dependency file (package-lock.json,
