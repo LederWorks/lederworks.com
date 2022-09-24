@@ -33,8 +33,16 @@ jobs:
           # hash as a part of the cache key.
           # https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#caching-packages-data
           cache-dependency-path: '**/package-lock.json'
+      
+      - name : Cache
+        uses: actions/cache@v2
+        with:
+          path: "frontend/node_modules"
+          key: node-modules-${{ hashFiles('frontend/package.json') }}
 
       - run: npm ci
+        working-directory: ./frontend
+        
       - run: hugo --minify
 
       - name: Deploy
