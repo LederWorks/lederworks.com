@@ -32,17 +32,13 @@ jobs:
           # npm-shrinkwrap.json or yarn.lock) in the repository root, and uses its
           # hash as a part of the cache key.
           # https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#caching-packages-data
-          cache-dependency-path: '**/package-lock.json'
-      
-      - name : Cache
-        uses: actions/cache@v2
-        with:
-          path: "frontend/node_modules"
-          key: node-modules-${{ hashFiles('frontend/package.json') }}
+          cache-dependency-path: |
+            '**/package-lock.json'
+            server/app/package-lock.json
+            frontend/app/package-lock.json
 
       - run: npm ci
-        working-directory: ./frontend
-        
+      - run: npm test
       - run: hugo --minify
 
       - name: Deploy
