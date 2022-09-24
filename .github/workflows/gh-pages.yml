@@ -33,17 +33,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - run: npm ci
-
-      - name: Cache Dependencies
-        uses: actions/cache@v2
-        with:
-          path: /tmp/hugo_cache
-          key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-hugomod-
-
-      - name: Build
-        run: hugo --minify
+      - run: hugo --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
