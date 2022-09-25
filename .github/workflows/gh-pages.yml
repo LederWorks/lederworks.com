@@ -54,7 +54,7 @@ jobs:
 
       - run: npm cache verify
       - run: npm install
-      - run: npm test
+      # - run: npm test
       - run: hugo --minify
 
       - name: Deploy
