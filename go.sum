@@ -1,10 +1,5 @@
 github.com/FortAwesome/Font-Awesome v0.0.0-20210804190922-7d3d774145ac/go.mod h1:IUgezN/MFpCDIlFezw3L8j83oeiIuYoj28Miwr/KUYo=
-github.com/gohugoio/hugo-mod-heroicons v0.0.0-20210121184556-d1635e3c8e62 h1:jtmtbc8wd17iUall0Hl6ZBE5Q4l0rQYWnpvk4/g0LuY=
-github.com/gohugoio/hugo-mod-heroicons v0.0.0-20210121184556-d1635e3c8e62/go.mod h1:6mFNBWXSBQpSRwVrb1jozCJDgQkw+5aIu1yy17D0PW4=
 github.com/google/docsy v0.4.0 h1:Eyt2aiDC1fnw/Qq/9xnIqUU5n5Yyk4c8gX3nBDdTv/4=
 github.com/google/docsy v0.4.0/go.mod h1:vJjGkHNaw9bO42gpFTWwAUzHZWZEVlK46Kx7ikY5c7Y=
 github.com/google/docsy/dependencies v0.4.0/go.mod h1:2zZxHF+2qvkyXhLZtsbnqMotxMukJXLaf8fAZER48oo=
-github.com/refactoringui/heroicons v0.4.2/go.mod h1:82HsLWQga7MkEl5aK8TctxPPIBlXrsyWcVTB57uipuk=
-github.com/thingsym/hugo-theme-techdoc v0.9.8 h1:rZj2eYaI/lvyPmXJbn3QS6eaULbH5o4NU5UI0VHN54w=
-github.com/thingsym/hugo-theme-techdoc v0.9.8/go.mod h1:HgH3EWQ4j2sDjNP8UBio6zyZim8RnfJCY1gTWxVGcxA=
 github.com/twbs/bootstrap v4.6.1+incompatible/go.mod h1:fZTSrkpSf0/HkL0IIJzvVspTt1r9zuf7XlZau8kpcY0=

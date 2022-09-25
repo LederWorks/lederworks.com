@@ -33,26 +33,7 @@ jobs:
           node-version: '18'
           check-latest: true
           cache: 'npm'
-          # The action defaults to search for the dependency file (package-lock.json,
-          # npm-shrinkwrap.json or yarn.lock) in the repository root, and uses its
-          # hash as a part of the cache key.
-          # https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#caching-packages-data
-          # cache-dependency-path: |
-          #   '**/package-lock.json'
-          #   server/app/package-lock.json
-          #   frontend/app/package-lock.json
-          # cache-dependency-path: '/home/runner/work/lederworks.com/lederworks.com/package-lock.json'
           cache-dependency-path: '**/package-lock.json'
-
-      # - run: ls -lha ~/work/_temp/.npm
-
-      # - name: Cache dependencies
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
 
       - run: npm ci
       - run: hugo --minify
