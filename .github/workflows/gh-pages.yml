@@ -40,7 +40,7 @@ jobs:
           #   '**/package-lock.json'
           #   server/app/package-lock.json
           #   frontend/app/package-lock.json
-          cache-dependency-path: '/home/runner/work/lederworks.com/lederworks.com/package.json'
+          cache-dependency-path: '/home/runner/work/lederworks.com/lederworks.com/package-lock.json'
 
       # - name: Cache dependencies
       #   uses: actions/cache@v1
