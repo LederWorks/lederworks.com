@@ -1,0 +1,57 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LederWorks – naming</title><link>https://lederworks.com/tags/naming/</link><description>Recent content in naming on LederWorks</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 24 Sep 2012 00:00:00 +0000</lastBuildDate><atom:link href="https://lederworks.com/tags/naming/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Module Naming</title><link>https://lederworks.com/docs/module-standards/naming/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/</guid><description>
+&lt;hr>
+&lt;h2 id="naming">Naming&lt;/h2>
+&lt;p>We are following the default &lt;a href="https://www.terraform.io/registry/modules/publish">naming conventions&lt;/a> enforced on the &lt;a href="https://registry.terraform.io/">Terraform Registry&lt;/a> for terraform modules.&lt;/p>
+&lt;p>Each Brick and Wrapper needs its own repository in the &lt;a href="https://github.com/LederWorks">LederWorks Organization&lt;/a> based on the following rules:&lt;/p>
+&lt;p>&lt;code>language-provider-easy-category-purpose&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>Every word is delimited by hyphens.&lt;/li>
+&lt;li>The first word of every module is the &lt;em>language&lt;/em> the majority of the code is written, eg. &lt;em>terraform&lt;/em>, &lt;em>bicep&lt;/em>, &lt;em>ansible&lt;/em>, &lt;em>golang&lt;/em> etc.&lt;/li>
+&lt;li>The second word is either a terraform provider or an API class.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>, you can replace that with your organization name for example.&lt;/li>
+&lt;li>The fourth word is either the &lt;em>category&lt;/em> of the deployment type or &lt;em>wrapper&lt;/em>.&lt;/li>
+&lt;li>The fifth and consequent words are the &lt;em>purpose&lt;/em>, which needs to be unique within the organization. We are suffixing the input parameters and variables with this using snake_case, eg. for:
+&lt;code>terraform-azurerm-easy-container-aks-cluster&lt;/code> all variables will be prefixed with &lt;code>aks_cluster&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Terraform Bricks</title><link>https://lederworks.com/docs/module-standards/naming/terraform-bricks/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/terraform-bricks/</guid><description>
+&lt;hr>
+&lt;h3 id="terraform-sub-modules">Terraform Sub-Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the provider the majority of the code is written in, eg. &lt;em>azurerm&lt;/em>, &lt;em>azuread&lt;/em>, &lt;em>kubernetes&lt;/em>, &lt;em>helm&lt;/em> etc.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>The fourth word is the category the resource under on the &lt;a href="https://registry.terraform.io/">Terraform Registry&lt;/a> documentation, eg. &lt;em>compute&lt;/em>, &lt;em>container&lt;/em>, &lt;em>storage&lt;/em> etc. If that is more than 2 word eg. &lt;em>Logic App&lt;/em>, the do not use any delimiters, write in a single word, eg. &lt;em>logicapp&lt;/em>.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for eg., if it&amp;rsquo;s deploying a Linux VM, then it should be linux-vm.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>terraform-azurerm-easy-compute-linux-vm&lt;/code>&lt;/p></description></item><item><title>Docs: Terraform Wrappers</title><link>https://lederworks.com/docs/module-standards/naming/terraform-wrappers/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/terraform-wrappers/</guid><description>
+&lt;hr>
+&lt;h3 id="terraform-wrapper-modules">Terraform Wrapper Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the provider the majority of the code is written in, eg. &lt;em>azurerm&lt;/em>, &lt;em>azuread&lt;/em>, &lt;em>kubernetes&lt;/em>, &lt;em>helm&lt;/em> etc.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>The fourth word is &lt;em>wrapper&lt;/em>.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for and delimited by _. If it is deploying an AKS Cluster, then it should be aks-cluster.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>terraform-azurerm-easy-wrapper-aks-cluster&lt;/code>&lt;/p></description></item><item><title>Docs: Bicep Bricks</title><link>https://lederworks.com/docs/module-standards/naming/bicep-bricks/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/bicep-bricks/</guid><description>
+&lt;hr>
+&lt;h3 id="bicep-sub-modules">Bicep Sub Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the second part of the &lt;a href="https://docs.microsoft.com/en-us/azure/templates/">ARM API Documentations&lt;/a> resource, eg. for Microsoft.Network/ it is going to be &lt;em>network&lt;/em>.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for. If it is deploying a DataBricks workspace it is going to be &lt;em>databricks-workspace&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>bicep-managedidentity-easy-user-managed-identity&lt;/code>&lt;/p></description></item><item><title>Docs: Bicep Wrappers</title><link>https://lederworks.com/docs/module-standards/naming/bicep-wrappers/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/bicep-wrappers/</guid><description>
+&lt;hr>
+&lt;h3 id="bicep-wrapper-modules">Bicep Wrapper Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>The third word is &lt;em>wrapper&lt;/em>.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for. If it is deploying a DataBricks deployment in an island vnet, then it is going to be &lt;em>databricks-isolated-vnet&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>bicep-easy-wrapper-databricks-isolated-vnet&lt;/code>&lt;/p></description></item><item><title>Docs: GoLang Modules</title><link>https://lederworks.com/docs/module-standards/naming/golang-modules/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/golang-modules/</guid><description>
+&lt;hr>
+&lt;h3 id="golang-modules">GoLang Modules&lt;/h3>
+&lt;p>As Go Modules in general importing several packages, I do not think that we need to include this information in the name of the respective repository.&lt;/p>
+&lt;ul>
+&lt;li>The second word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for. If it is used for terratests, then it should be &lt;em>terratests&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>golang-easy-terratests&lt;/code>&lt;/p></description></item></channel></rss>

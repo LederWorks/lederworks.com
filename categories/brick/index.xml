@@ -1,0 +1,18 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LederWorks – Brick</title><link>https://lederworks.com/categories/brick/</link><description>Recent content in Brick on LederWorks</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 24 Sep 2012 00:00:00 +0000</lastBuildDate><atom:link href="https://lederworks.com/categories/brick/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Terraform Bricks</title><link>https://lederworks.com/docs/module-standards/naming/terraform-bricks/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/terraform-bricks/</guid><description>
+&lt;hr>
+&lt;h3 id="terraform-sub-modules">Terraform Sub-Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the provider the majority of the code is written in, eg. &lt;em>azurerm&lt;/em>, &lt;em>azuread&lt;/em>, &lt;em>kubernetes&lt;/em>, &lt;em>helm&lt;/em> etc.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>The fourth word is the category the resource under on the &lt;a href="https://registry.terraform.io/">Terraform Registry&lt;/a> documentation, eg. &lt;em>compute&lt;/em>, &lt;em>container&lt;/em>, &lt;em>storage&lt;/em> etc. If that is more than 2 word eg. &lt;em>Logic App&lt;/em>, the do not use any delimiters, write in a single word, eg. &lt;em>logicapp&lt;/em>.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for eg., if it&amp;rsquo;s deploying a Linux VM, then it should be linux-vm.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>terraform-azurerm-easy-compute-linux-vm&lt;/code>&lt;/p></description></item><item><title>Docs: Bicep Bricks</title><link>https://lederworks.com/docs/module-standards/naming/bicep-bricks/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/bicep-bricks/</guid><description>
+&lt;hr>
+&lt;h3 id="bicep-sub-modules">Bicep Sub Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the second part of the &lt;a href="https://docs.microsoft.com/en-us/azure/templates/">ARM API Documentations&lt;/a> resource, eg. for Microsoft.Network/ it is going to be &lt;em>network&lt;/em>.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for. If it is deploying a DataBricks workspace it is going to be &lt;em>databricks-workspace&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>bicep-managedidentity-easy-user-managed-identity&lt;/code>&lt;/p></description></item></channel></rss>

@@ -1,0 +1,265 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LederWorks – Documentation</title><link>https://lederworks.com/docs/</link><description>Recent content in Documentation on LederWorks</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://lederworks.com/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Input Parameters</title><link>https://lederworks.com/docs/module-standards/principles/inputs/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/inputs/</guid><description>
+&lt;hr>
+&lt;h2 id="bla">BLA&lt;/h2>
+&lt;h3 id="input-variables">Input Variables&lt;/h3>
+&lt;ul>
+&lt;li>Variables are using snake_case syntax.&lt;/li>
+&lt;li>Every sub-module variable name should be prefixed with the last section of the module name eg. the &lt;em>purpose&lt;/em>, delimited by underscores. Wrapper modules needs to have a separate variable_%sub-module name%.tf file and the same variable names should be used there, as in the called Bricks.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#Module Name:
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">terraform&lt;/span>&lt;span style="color:#a40000">-&lt;/span>&lt;span style="color:#204a87;font-weight:bold">azurerm&lt;/span>&lt;span style="color:#a40000">-&lt;/span>&lt;span style="color:#204a87;font-weight:bold">easy&lt;/span>&lt;span style="color:#a40000">-&lt;/span>&lt;span style="color:#204a87;font-weight:bold">wrapper&lt;/span>&lt;span style="color:#a40000">-&lt;/span>&lt;span style="color:#204a87;font-weight:bold">aks&lt;/span>&lt;span style="color:#a40000">-&lt;/span>&lt;span style="color:#204a87;font-weight:bold">alert&lt;/span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#Variable Names:
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">aks_alert_container_cpu_percentage&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">aks_alert_container_memory_percentage&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">aks_alert_node_cpu_percentage&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">aks_alert_node_memory_percentage&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>Always have a description for each of your variables, as terraform-docs will use this to generate the README.MD&lt;/li>
+&lt;li>Create a validation block for your variables whenever possible. This will prevent user errors. Make sure that your error_message clearly states what is the problem.&lt;/li>
+&lt;li>In sub-modules always input object properties and not whole objects, as that makes for_each loops much simpler in HCL.&lt;/li>
+&lt;li>In wrapper-modules, you can input a whole object (preferrably outputted from one of the sub-modules used) and use the below technique to grab only what you need from it. There is a limitation, if the object output contains sensitive data, all output properties will inherit it too, even if it&amp;rsquo;s not sensitive, and you can&amp;rsquo;t use it for count and for_each operations in calling wrapper-modules. In this case you also need to output the required object properties as well.&lt;/li>
+&lt;/ul>
+&lt;h3 id="blabala">BLABALA&lt;/h3>
+&lt;pre>&lt;code>```hcl
+#Sensitive value can't be used in subsequent wrapper modules in terraform functions:
+output &amp;quot;aks&amp;quot; {
+value = azurerm_kubernetes_cluster.aks_cluster
+sensitive = true
+}
+#So We output the used object properties as well:
+output &amp;quot;name&amp;quot; {
+value = azurerm_kubernetes_cluster.aks_cluster.name
+}
+output &amp;quot;id&amp;quot; {
+value = azurerm_kubernetes_cluster.aks_cluster.id
+}
+output &amp;quot;fqdn&amp;quot; {
+value = azurerm_kubernetes_cluster.aks_cluster.fqdn
+}
+output &amp;quot;identity&amp;quot; {
+value = azurerm_kubernetes_cluster.aks_cluster.identity[0]
+}
+output &amp;quot;kubelet_identity&amp;quot; {
+value = azurerm_kubernetes_cluster.aks_cluster.kubelet_identity[0]
+}
+```
+&lt;/code>&lt;/pre>
+&lt;h2 id="balaba">BALABA&lt;/h2>
+&lt;ul>
+&lt;li>Use common variables to get all the specific details for a given deployment such as, where, who, why and what. Also for a Tag input, with team specific tagging. Common vars does not needs to be prefixed with the &amp;ldquo;purpose&amp;rdquo; os the sub-modules.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#variables-common.tf
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#### Subscription ####
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">variable&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;subscription_id&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> description&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;ID of the Subscription&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> type&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">validation&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> condition&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">can&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#204a87;font-weight:bold">regex&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">SubscriptionID&lt;/span>&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> error_message&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Must be a valid subscription id. Ex: 9e4e50cf-5a4a-4deb-a466-9086cd9e365b.&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#### Resource Group ####
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">variable&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;resource_group_object&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> description&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Resource Group Object&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> type&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">any&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#### Tags ####
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">variable&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;tags&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000">description&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;BYO Tags, preferrable from a local on your side :D&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000">type&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">map&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>All the resource names should be feed from the top level, where the deployment called and propagated down to the Bricks. These are preferrably coming from a separate naming module such as &lt;a href="https://github.com/Azure/terraform-azurerm-naming">https://github.com/Azure/terraform-azurerm-naming&lt;/a>.&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Terraform Bricks</title><link>https://lederworks.com/docs/module-standards/naming/terraform-bricks/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/terraform-bricks/</guid><description>
+&lt;hr>
+&lt;h3 id="terraform-sub-modules">Terraform Sub-Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the provider the majority of the code is written in, eg. &lt;em>azurerm&lt;/em>, &lt;em>azuread&lt;/em>, &lt;em>kubernetes&lt;/em>, &lt;em>helm&lt;/em> etc.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>The fourth word is the category the resource under on the &lt;a href="https://registry.terraform.io/">Terraform Registry&lt;/a> documentation, eg. &lt;em>compute&lt;/em>, &lt;em>container&lt;/em>, &lt;em>storage&lt;/em> etc. If that is more than 2 word eg. &lt;em>Logic App&lt;/em>, the do not use any delimiters, write in a single word, eg. &lt;em>logicapp&lt;/em>.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for eg., if it&amp;rsquo;s deploying a Linux VM, then it should be linux-vm.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>terraform-azurerm-easy-compute-linux-vm&lt;/code>&lt;/p></description></item><item><title>Docs: Output Parameters</title><link>https://lederworks.com/docs/module-standards/principles/outputs/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/outputs/</guid><description>
+&lt;hr>
+&lt;h3 id="outputs">Outputs&lt;/h3>
+&lt;ul>
+&lt;li>Always use sensitive=true if you need to. Terraform 0.15.x and above will fail your plan, but on lower versions sensitive data is outputted in clear text.&lt;/li>
+&lt;li>Output complete objects, and it&amp;rsquo;s properties only if it is &lt;em>sensitive&lt;/em> and going to be called with a terraform function on the wrapper level. It is limiting the number of objects in the statefile, also can be better consumed in wrapper-modules.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#outputs.tf
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">output&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;aks&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> value&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">azurerm_kubernetes_cluster&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">aks_cluster&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> sensitive&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">output&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;udr&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> value&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">azurerm_route_table&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">udr&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>When you are working with resource types, which having direct dependency on each other - for example a Virtual Machine and it&amp;rsquo;s NIC, create and output complex maps. This way later you can have a direct binding between resources which having a &lt;em>one-to-one&lt;/em> or &lt;em>one-to-many&lt;/em> relationship.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">output&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;windows_vm_list&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> value&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#000"> { for o in azurerm_windows_virtual_machine.windows_vm : o.name&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#a40000">&amp;gt;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">name&lt;/span> &lt;span style="color:#a40000">:&lt;/span> &lt;span style="color:#204a87;font-weight:bold">o&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">id&lt;/span>&lt;span style="color:#a40000">:&lt;/span> &lt;span style="color:#204a87;font-weight:bold">o&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">id&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">nic&lt;/span> &lt;span style="color:#a40000">:&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#a40000">:&lt;/span> &lt;span style="color:#204a87;font-weight:bold">azurerm_network_interface&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">interface&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#204a87;font-weight:bold">o&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">].&lt;/span>&lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">id&lt;/span>&lt;span style="color:#a40000">:&lt;/span> &lt;span style="color:#204a87;font-weight:bold">azurerm_network_interface&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">interface&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#204a87;font-weight:bold">o&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">].&lt;/span>&lt;span style="color:#204a87;font-weight:bold">id&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Terraform Wrappers</title><link>https://lederworks.com/docs/module-standards/naming/terraform-wrappers/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/terraform-wrappers/</guid><description>
+&lt;hr>
+&lt;h3 id="terraform-wrapper-modules">Terraform Wrapper Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the provider the majority of the code is written in, eg. &lt;em>azurerm&lt;/em>, &lt;em>azuread&lt;/em>, &lt;em>kubernetes&lt;/em>, &lt;em>helm&lt;/em> etc.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>The fourth word is &lt;em>wrapper&lt;/em>.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for and delimited by _. If it is deploying an AKS Cluster, then it should be aks-cluster.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>terraform-azurerm-easy-wrapper-aks-cluster&lt;/code>&lt;/p></description></item><item><title>Docs: Bicep Bricks</title><link>https://lederworks.com/docs/module-standards/naming/bicep-bricks/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/bicep-bricks/</guid><description>
+&lt;hr>
+&lt;h3 id="bicep-sub-modules">Bicep Sub Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is the second part of the &lt;a href="https://docs.microsoft.com/en-us/azure/templates/">ARM API Documentations&lt;/a> resource, eg. for Microsoft.Network/ it is going to be &lt;em>network&lt;/em>.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for. If it is deploying a DataBricks workspace it is going to be &lt;em>databricks-workspace&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>bicep-managedidentity-easy-user-managed-identity&lt;/code>&lt;/p></description></item><item><title>Docs: Terraform Locals</title><link>https://lederworks.com/docs/module-standards/principles/locals/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/locals/</guid><description>
+&lt;hr>
+&lt;h3 id="locals">Locals&lt;/h3>
+&lt;ul>
+&lt;li>Locals are using snake_case syntax.&lt;/li>
+&lt;li>Build up tags as locals, and use these in your code instead of variables. If you tag each level of modules properly each created resource will inherit the tag of all the modules used in it&amp;rsquo;s creation, just like a block-chain. It is fantastic as you can write exclusion policies for certain security use cases based on the resource tags. For example you do not enforce https_only on an &lt;code>azurerm_storage_account&lt;/code>, which you use as an NFS file share, but everywhere else you can prevent deployments with a deny policy.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#locals.tf
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">locals&lt;/span> {&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#Tags
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#000">tags&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">merge&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> creation_mode&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;terraform&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> terraform-azurerm-easy-container-aks-cluster&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;true&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">tags&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Bicep Wrappers</title><link>https://lederworks.com/docs/module-standards/naming/bicep-wrappers/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/bicep-wrappers/</guid><description>
+&lt;hr>
+&lt;h3 id="bicep-wrapper-modules">Bicep Wrapper Modules&lt;/h3>
+&lt;ul>
+&lt;li>The second word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>The third word is &lt;em>wrapper&lt;/em>.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for. If it is deploying a DataBricks deployment in an island vnet, then it is going to be &lt;em>databricks-isolated-vnet&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>bicep-easy-wrapper-databricks-isolated-vnet&lt;/code>&lt;/p></description></item><item><title>Docs: Terraform Providers</title><link>https://lederworks.com/docs/module-standards/principles/providers/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/providers/</guid><description>
+&lt;hr>
+&lt;h3 id="providers">Providers&lt;/h3>
+&lt;ul>
+&lt;li>Do not set providers inside a module, as that results in an error, when you remove module call from deployments. An example for exception could be, when you need to enforce certain deployments (Kured, Wiz Connector etc.) with a cluster deployment, than you can add a kubernetes or helm provider called deployment to your aks-cluster module. The main rule that it needs to share the lifecycle of the underlying resource.&lt;/li>
+&lt;li>Set the minimum required terraform version. Currently we are using 1.1.0 across all modules, but might be bumped to 1.2.0 to leverage Output &lt;a href="https://www.terraform.io/language/expressions/custom-conditions#preconditions-and-postconditions">Custom Condition Checks&lt;/a> functionality.&lt;/li>
+&lt;li>Set the minimum required provider source and version, in a terraform.tf file. Each resource should be set to the latest &lt;a href="https://github.com/hashicorp/terraform-provider-azurerm/blob/main/CHANGELOG.md">azurerm provider version&lt;/a>, where there is an update or bugfix to the resource.&lt;/li>
+&lt;li>Set experiments block if it is required.&lt;/li>
+&lt;li>If it is a Wrapper, then this will be inherited from the Bricks, and the highest common union will be required. If you set there you are breaking that inheritance chain, so don&amp;rsquo;t do it.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#terraform.tf
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">terraform&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> required_version&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#000"> &amp;#34;&amp;gt;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#a40000">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">required_providers&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> azurerm&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> source&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">hashicorp&lt;/span>&lt;span style="color:#a40000">/&lt;/span>&lt;span style="color:#204a87;font-weight:bold">azurerm&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> version&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#000"> &amp;#34;&amp;gt;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">3&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">14&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#a40000">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> azapi&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> source&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">azure&lt;/span>&lt;span style="color:#a40000">/&lt;/span>&lt;span style="color:#204a87;font-weight:bold">azapi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> version&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#000"> &amp;#34;&amp;gt;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">5&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#a40000">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> kubernetes&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> source&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">hashicorp&lt;/span>&lt;span style="color:#a40000">/&lt;/span>&lt;span style="color:#204a87;font-weight:bold">kubernetes&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> version&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#000"> &amp;#34;&amp;gt;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">11&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#a40000">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> experiments&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#204a87;font-weight:bold">module_variable_optional_attrs&lt;/span>&lt;span style="color:#000;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul></description></item><item><title>Docs: GoLang Modules</title><link>https://lederworks.com/docs/module-standards/naming/golang-modules/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/golang-modules/</guid><description>
+&lt;hr>
+&lt;h3 id="golang-modules">GoLang Modules&lt;/h3>
+&lt;p>As Go Modules in general importing several packages, I do not think that we need to include this information in the name of the respective repository.&lt;/p>
+&lt;ul>
+&lt;li>The second word is &lt;em>easy&lt;/em>. If you implementing these standards somewhere else, this most possible will be yout company, organization etc. name.&lt;/li>
+&lt;li>Any subsequent words should clearly state, what that module is used for. If it is used for terratests, then it should be &lt;em>terratests&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;p>Example: &lt;code>golang-easy-terratests&lt;/code>&lt;/p></description></item><item><title>Docs: Terraform Lifecycle</title><link>https://lederworks.com/docs/module-standards/principles/lifecycle/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/lifecycle/</guid><description>
+&lt;hr>
+&lt;h3 id="lifecycle-block">Lifecycle Block&lt;/h3>
+&lt;ul>
+&lt;li>Typically you want to add ignore_changes block for every object property, which can be modified outside of terraform by Cloud Provider or automation, such as policies.&lt;/li>
+&lt;li>You need to be very careful tough, as this could break the functionality to interact with resource properties via the modules through the lifecycle of the deployment. Unfortunately there is no way (yet), to dynamically set the lifecycle block.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#main.tf
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">resource&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;azurerm_kubernetes_cluster&amp;#34; &amp;#34;aks_cluster&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">lifecycle&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> ignore_changes&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#000;font-weight:bold">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">kubernetes_version&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">default_node_pool&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#000;font-weight:bold">].&lt;/span>&lt;span style="color:#204a87;font-weight:bold">orchestrator_version&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">default_node_pool&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#000;font-weight:bold">].&lt;/span>&lt;span style="color:#204a87;font-weight:bold">max_count&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Timeouts</title><link>https://lederworks.com/docs/module-standards/principles/timeouts/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/timeouts/</guid><description>
+&lt;hr>
+&lt;h3 id="timeouts">Timeouts&lt;/h3>
+&lt;ul>
+&lt;li>Overriding timeouts can help us fail fast. While the default timeouts are very forgiving in both terraform and azurerm api, we do not want an AKS deployment to timeout after 90 minutes, when the average deployment time is 5-8 minutes. So we override that to 30 minutes. This needs to be explored independently for every resource, where we introduce it. As a rule we want to use it for resources, where creation time average is more than 5 minutes or failure rate justifies it.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-hcl" data-lang="hcl">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#variables-aks_cluster.tf
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#### TimeOut ####
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">variable&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;aks_cluster_timeout_create&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> type&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> default&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;30m&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> description&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Specify timeout for create action. Defaults to 30 minutes.&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">variable&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;aks_cluster_timeout_update&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> type&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> default&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;30m&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> description&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Specify timeout for update action. Defaults to 30 minutes.&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">variable&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;aks_cluster_timeout_read&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> type&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> default&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;5m&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> description&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Specify timeout for read action. Defaults to 5 minutes.&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">variable&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;aks_cluster_timeout_delete&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> type&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> default&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;30m&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> description&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Specify timeout for delete action. Defaults to 30 minutes.&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">#main.tf
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">resource&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;azurerm_kubernetes_cluster&amp;#34; &amp;#34;aks_cluster&amp;#34;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">timeouts&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> create&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">aks_cluster_timeout_create&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> update&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">aks_cluster_timeout_update&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> read&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">aks_cluster_timeout_read&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000"> delete&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#204a87;font-weight:bold">aks_cluster_timeout_delete&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>With this we can limit failure times, but also allow people to raise or lower it, if they feel they need to.&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Versioning</title><link>https://lederworks.com/docs/module-standards/principles/versioning/</link><pubDate>Mon, 24 Sep 2012 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/versioning/</guid><description>
+&lt;hr>
+&lt;h3 id="versioning">Versioning&lt;/h3>
+&lt;ul>
+&lt;li>Modules are versioned with git release tags.&lt;/li>
+&lt;li>Use semantic versioning. Syntax is major_version.minor_version.patch_version, eg. 1.0.0&lt;/li>
+&lt;li>patch_version needs to be raised, whenever we fixing some issues or adjusting terraform code to mirror latest provider changes&lt;/li>
+&lt;li>minor_version needs to be raised, whenever we are implementing a new feature. We should support preview features as well, so teams can opt-in.&lt;/li>
+&lt;li>major_version needs to be raised, whenever we are introducing a breaking change, which requires rebuild of a given resource&lt;/li>
+&lt;li>Due to the limitation that module sourcing can&amp;rsquo;t use variables, Wrappers needs to use the same logic. When we version any of the Bricks, the Wrappers consuming it should be updated as well.&lt;/li>
+&lt;/ul></description></item></channel></rss>

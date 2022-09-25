@@ -1,0 +1,18 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LederWorks – Module Standards</title><link>https://lederworks.com/docs/module-standards/</link><description>Recent content in Module Standards on LederWorks</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://lederworks.com/docs/module-standards/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Module Naming</title><link>https://lederworks.com/docs/module-standards/naming/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/naming/</guid><description>
+&lt;hr>
+&lt;h2 id="naming">Naming&lt;/h2>
+&lt;p>We are following the default &lt;a href="https://www.terraform.io/registry/modules/publish">naming conventions&lt;/a> enforced on the &lt;a href="https://registry.terraform.io/">Terraform Registry&lt;/a> for terraform modules.&lt;/p>
+&lt;p>Each Brick and Wrapper needs its own repository in the &lt;a href="https://github.com/LederWorks">LederWorks Organization&lt;/a> based on the following rules:&lt;/p>
+&lt;p>&lt;code>language-provider-easy-category-purpose&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>Every word is delimited by hyphens.&lt;/li>
+&lt;li>The first word of every module is the &lt;em>language&lt;/em> the majority of the code is written, eg. &lt;em>terraform&lt;/em>, &lt;em>bicep&lt;/em>, &lt;em>ansible&lt;/em>, &lt;em>golang&lt;/em> etc.&lt;/li>
+&lt;li>The second word is either a terraform provider or an API class.&lt;/li>
+&lt;li>The third word is &lt;em>easy&lt;/em>, you can replace that with your organization name for example.&lt;/li>
+&lt;li>The fourth word is either the &lt;em>category&lt;/em> of the deployment type or &lt;em>wrapper&lt;/em>.&lt;/li>
+&lt;li>The fifth and consequent words are the &lt;em>purpose&lt;/em>, which needs to be unique within the organization. We are suffixing the input parameters and variables with this using snake_case, eg. for:
+&lt;code>terraform-azurerm-easy-container-aks-cluster&lt;/code> all variables will be prefixed with &lt;code>aks_cluster&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Module Principles</title><link>https://lederworks.com/docs/module-standards/principles/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/principles/</guid><description>
+&lt;hr>
+&lt;p>As a general rule, keep it simple! If you write a module only put in what is needed for minimum functionality, all extras needs to be handled in other modules, so we can maintain a sustainable ecosystem.&lt;/p></description></item><item><title>Docs: Module Repository Setup</title><link>https://lederworks.com/docs/module-standards/repository/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/module-standards/repository/</guid><description>
+&lt;hr></description></item></channel></rss>
