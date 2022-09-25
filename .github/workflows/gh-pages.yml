@@ -3,7 +3,7 @@ name: GitHub Pages
 on:
   push:
     branches:
-      - main  # Set a branch to deploy
+      - main
   pull_request:
 
 jobs:
@@ -14,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: recursive  # Fetch the Docsy theme
-          fetch-depth: 0         # Fetch all history for .GitInfo and .Lastmod
+          submodules: recursive
+          fetch-depth: 0
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -27,8 +27,6 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
-        # env: 
-        #   FORCE_COLOR: 0
         with:
           node-version: '18'
           check-latest: true
@@ -40,6 +38,6 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
