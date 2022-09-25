@@ -24,16 +24,15 @@ jobs:
           extended: true
 
       - run: hugo version
-      - run: pwd
 
       - name: Setup Node
         uses: actions/setup-node@v3
-        env: 
-          FORCE_COLOR: 0
+        # env: 
+        #   FORCE_COLOR: 0
         with:
-          node-version: '14'
+          node-version: '18'
           check-latest: true
-          # cache: 'npm'
+          cache: 'npm'
           # The action defaults to search for the dependency file (package-lock.json,
           # npm-shrinkwrap.json or yarn.lock) in the repository root, and uses its
           # hash as a part of the cache key.
@@ -43,6 +42,7 @@ jobs:
           #   server/app/package-lock.json
           #   frontend/app/package-lock.json
           # cache-dependency-path: '/home/runner/work/lederworks.com/lederworks.com/package-lock.json'
+          cache-dependency-path: '**/package-lock.json'
 
       # - run: ls -lha ~/work/_temp/.npm
 
@@ -54,9 +54,7 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-node-
 
-      - run: npm cache verify
-      - run: npm install postcss-cli
-      # - run: npm test
+      - run: npm ci
       - run: hugo --minify
 
       - name: Deploy
