@@ -1,7 +1,7 @@
 /public
 resources/
 node_modules/
-package-lock.json
+# package-lock.json
 .hugo_build.lock
 nohup.out
 .DS_Store
