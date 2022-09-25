@@ -28,6 +28,8 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
+        env: 
+          FORCE_COLOR: 0
         with:
           node-version: '14'
           check-latest: true
