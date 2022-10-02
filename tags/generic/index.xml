@@ -1,2 +1,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LederWorks – generic</title><link>https://lederworks.com/tags/generic/</link><description>Recent content in generic on LederWorks</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://lederworks.com/tags/generic/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Generic Terraform</title><link>https://lederworks.com/docs/generic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/generic/</guid><description>
-&lt;hr></description></item></channel></rss>
+&lt;hr>
+&lt;h2 id="generic-terraform-modules">Generic Terraform Modules&lt;/h2>
+&lt;p>These are mostly helper and support modules to ease operating larger environemnts.&lt;/p>
+&lt;p>Another option, to store your frequently used HCL objects in consule as a key.&lt;/p></description></item><item><title>Docs: Tool Modules</title><link>https://lederworks.com/docs/generic/tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/generic/tools/</guid><description>
+&lt;hr>
+&lt;h2 id="tool-modules">Tool Modules&lt;/h2></description></item><item><title>Docs: Helper Modules</title><link>https://lederworks.com/docs/generic/helper/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lederworks.com/docs/generic/helper/</guid><description>
+&lt;hr>
+&lt;h2 id="helper-modules">Helper Modules&lt;/h2></description></item></channel></rss>
